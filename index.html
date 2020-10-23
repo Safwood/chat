@@ -9,24 +9,29 @@
 <body>
   <div class="login">
     <div class="login__form">
-      <input type="text" class="login__name">
-      <button class="login__button"></button>
+      <input type="text" class="login__name" placeholder="Введите имя">
+      <button class="login__button">Войти</button>
     </div>
   </div>
   <div class="chat">
     <div class="chat__users">
       <div class="chat__users-header">
-        <h2 class="chat__users-title">Пользователи</h2>
+        <h2 class="chat__users-title">Пользователи в сети:</h2>
       </div>
-      <div class="chat__users-list">
-        
-      </div>
+      <ul class="chat__users-list">
+        <li class="chat__users-item">Алексей</li>
+      </ul>
     </div>
     <div class="chat__messages">
-      <div class="chat__messages-screen"></div>
+      <div class="chat__messages-screen">
+        <div class="chat__messages-text">
+          <div class="chat__messages-name">Имя</div>
+          <div class="chat__messages-content">Привет! Как дела?</div>
+        </div>
+      </div>
       <div class="chat__messages-write">
         <input type="text" class="chat__messages-new">
-        <button class="chat__messages-button"></button>
+        <button class="chat__messages-button">Отправить</button>
       </div>
     </div>
   </div>
