@@ -182,6 +182,7 @@ chooseButton.addEventListener('change', (e) => {
 uploadButton.addEventListener('click', () => {
   photo.src = fileReader.result;
   uploadForm.style.display = "none";
+  
 })
 
 
