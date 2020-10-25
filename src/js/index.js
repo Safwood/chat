@@ -11,11 +11,13 @@ const loginError = document.querySelector('.login__error');
 const closeButton = document.querySelector('.close-button');
 const usersNumber = document.querySelector('.chat__users-number');
 const photo = document.querySelector('#user_avatar');
+const photoLoading = document.querySelector('#upload-photo');
 const addPhotoButton = document.querySelector('[data-role=add-photo]');
 const uploadForm = document.querySelector('[data-role=upload-form]');
 const fileReader = new FileReader();
-//const cancelButton = document.querySelector('[data-role=cancel-button]');
-//const uploadButton = document.querySelector('[data-role=upload-button]');
+const cancelButton = document.querySelector('[data-role=cancel-button]');
+const chooseButton = document.querySelector('[data-role=choose-button]');
+const uploadButton = document.querySelector('[data-role=upload-button]');
 let usersListArray = 0;
 
 //server//
@@ -149,10 +151,23 @@ loginButton.addEventListener('click',() => {
 
 //photo
 fileReader.addEventListener('load', () => {
-  photo.src = fileReader.result;
+  
+  photoLoading.src = fileReader.result;
 })
 
-addPhotoButton.addEventListener('change', (e) => {
+addPhotoButton.addEventListener('click', (e) => {
+ 
+})
+
+addPhotoButton.addEventListener('click', () => {
+  uploadForm.style.display = "flex";
+})
+
+cancelButton.addEventListener('click', () => {
+  uploadForm.style.display = "none";
+})
+
+chooseButton.addEventListener('change', (e) => {
   const file = e.target.files[0];
 
   if (file) {
@@ -164,15 +179,9 @@ addPhotoButton.addEventListener('change', (e) => {
   }
 })
 
-//addPhotoButton.addEventListener('click', () => {
-//  uploadForm.style.display = "flex";
-//})
+uploadButton.addEventListener('click', () => {
+  photo.src = fileReader.result;
+  uploadForm.style.display = "none";
+})
 
-//cancelButton.addEventListener('click', () => {
-//  uploadForm.style.display = "none";
-//})
-
-//uploadButton.addEventListener('click', () => {
- // uploadForm.style.display = "none";
-//})
 

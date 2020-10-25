@@ -76,10 +76,6 @@ h1, h2, h3 {
   font-weight: bold;
 }
 
-.button:last-child {
-  margin-bottom: 0;
-}
-
 .login__error-content {
   margin-bottom: 30px;
   font-weight: bold;
@@ -167,17 +163,22 @@ h1, h2, h3 {
   margin-bottom: 30px;
 }
 
-.chat__users-button {
+.chat__users-link {
   cursor: pointer;
-  visibility: hidden;
+  font-size: 12px;
 }
 
-.chat__users-button {
-  font-size: 12px;
+.chat__users-link--main {
+  font-size: 20px;
 }
 
 .chat__users-link:hover {
   text-decoration: underline;
+}
+
+.photo-upload__input {
+  font-size: 12px;
+  visibility: hidden;
 }
 
 .chat__users-name {
@@ -272,3 +273,14 @@ outline: none;
   margin-bottom: 30px;
 }
 
+.upload-button {
+  margin-bottom: 10px;
+}
+
+.label-box {
+  display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}

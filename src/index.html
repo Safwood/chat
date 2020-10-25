@@ -26,10 +26,7 @@
           <div class="chat__users-user">
             <div class="chat__users-photo">
               <img src="placeholder-man.png" class="avatar" id="user_avatar" alt="Фото пользователя">
-              <input type="file" id="input-file" class="chat__users-button" data-role="add-photo"></input>
-              <label for="input-file">
-                <div class="chat__users-link">Загрузить</div>
-              </label>
+              <a class="chat__users-link" data-role="add-photo">Загрузить</a>
             </div>
             <h1 class="chat__users-name"></h1>
           </div>
@@ -50,8 +47,12 @@
       </div>
       <div class="photo-upload" data-role="upload-form">
         <h1 class="photo-upload__title">Загрузка фото</h1>
-        <img src="./placeholder-man.png" alt="Фото пользователя" class="avatar avatar--big">
-        <button class="button" data-role="upload-button">Загрузка</button>
+        <img src="./placeholder-man.png" alt="Фото пользователя" class="avatar avatar--big" id="upload-photo">
+        <label for="input" class="label-box">
+          <input type="file" id="input" name="file" class="photo-upload__input" data-role="choose-button"></input>
+          <div class="chat__users-link chat__users-link--main">Выбрать</div>
+        </label>
+        <button class="button" data-role="upload-button">Загрузить</button>
         <button class="button" data-role="cancel-button">Отмена</button>
       </div>
     </div>
