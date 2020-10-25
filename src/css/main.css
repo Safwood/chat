@@ -1,0 +1,274 @@
+html, body, .wrapper, .login, .chat {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3 {
+  padding: 0;
+  margin: 0;
+}
+
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(146, 191, 250);
+}
+
+.login__form {
+  background-color: rgb(68, 31, 231);
+  border-radius: 15px;
+  box-shadow: 0 0 28px rgba(0,0,0,0.25), 0 10px 10px darkgray;
+  height: 226px;
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.login__form-title {
+  font-weight: bold;
+  margin: 0 0 15px 0;
+  font-size: 18px;
+}
+
+.login__name {
+  margin-bottom: 20px;
+}
+
+.login__button, .close-button, .button {
+  background-color: rgb(138, 129, 196);
+  border-radius: 5px;
+  color: black;
+  padding: 7px 19px;
+  font-size: 15px;
+}
+
+.login__button:hover, .close-button:hover .button:hover{
+  background-color: rgb(164, 156, 212);
+  transition: 0.3s;
+}
+
+.login__button:focus, .login__name:focus, .close-button, .button:hover {
+  outline: none;
+}
+
+.login__error {
+  display:none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: absolute;
+  border-radius: 3px;
+  opacity: 0.3;
+  background-color: white;
+  opacity: 0.9;
+  width: 215px;
+  height: 124px;
+}
+
+.close-button, .button {
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.button:last-child {
+  margin-bottom: 0;
+}
+
+.login__error-content {
+  margin-bottom: 30px;
+  font-weight: bold;
+  font-size: 18px;
+  
+}
+
+.chat {
+  position: relative;
+  display: none;
+}
+
+.chat__users {
+  height: 100%;
+  width: 25%;
+  background-color: rgb(146, 191, 250);
+  box-shadow: 0 0 28px rgba(0,0,0,0.25), 0 10px 10px darkgray;
+  padding: 10px;
+}
+
+.chat__users-header {
+  margin-bottom: 20px;
+  background-color: rgb(214, 238, 252);
+  border-radius: 5px;
+  padding: 2px 20px;
+  color: rgb(0, 0, 97)
+}
+
+.chat__users-list {
+  padding: 5px 5px 5px 25px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat__users-item {
+  color: rgb(0, 0, 97);
+  font-size: 16px;
+  word-break: break-all;
+  margin-bottom: 10px;
+}
+
+.chat__users-item:last-child {
+  margin-bottom: 0;
+}
+
+.chat__users-title {
+  font-size: 16px;
+}
+
+.chat__users-user {
+  display: flex;
+  margin-top: 13px;
+  overflow: hidden;
+}
+
+.chat__users-name {
+  word-break: break-all;
+  font-size: 17px;
+}
+
+.chat__users-photo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.avatar {
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  margin-right: 10px;
+  margin-bottom: 5px;
+}
+
+.avatar--small {
+  border-radius: 50%;
+  height: 25px;
+  width: 25px;
+  margin-right: 10px;
+}
+
+.avatar--big {
+  height: 150px;
+  width: 150px;
+  margin-bottom: 30px;
+}
+
+.chat__users-button {
+  cursor: pointer;
+  visibility: hidden;
+}
+
+.chat__users-button {
+  font-size: 12px;
+}
+
+.chat__users-link:hover {
+  text-decoration: underline;
+}
+
+.chat__users-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.chat__messages {
+  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat__messages-write {
+  padding: 5px 25px;
+  width: 100%;
+  height: 5%;
+  display: flex;
+}
+
+.chat__messages-screen {
+  width: 100%;
+  flex: 1;
+  padding: 20px 36px;
+  overflow-y: scroll;
+}
+
+.chat__messages-new {
+  width: 80%;
+  margin-right: 10px;
+}
+
+.chat__messages-new:focus {
+outline: none;
+}
+
+.chat__messages-button {
+  padding: 5px 10px;
+}
+
+.chat__messages-text {
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 13px;
+}
+
+.chat__messages-heading {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.chat__messages-time {
+  margin-right: 10px;
+}
+
+.chat__messages-name {
+  margin-right: 10px;
+  color:rgb(0, 0, 97);
+}
+
+.chat__messages-content {
+  word-break: break-all;
+}
+
+.chat__messages-notification {
+  color: grey;
+  margin-bottom: 13px;
+}
+
+.photo-upload {
+  display:none;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  border-radius: 3px;
+  background-color: rgb(177, 217, 255);
+  opacity: 0.9;
+  width: 500px;
+  height: 431px;
+  flex-direction: column;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding-bottom: 15px;
+}
+
+.photo-upload__title {
+  margin-bottom: 30px;
+}
+
