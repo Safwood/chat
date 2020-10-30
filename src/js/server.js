@@ -9,25 +9,26 @@ const users = {
   body: []
 };
 
+const { v4: uuidv4 } = require('uuid');
+
 //var userId = 1000;
 //const online = {};
 
 wss.on('connection', function(wsParams) {
-  //userId = ++userId;
+  const userId = uuidv4();
   //console.log('user connect: ' + userId);
   let nick;
 
   wsParams.on('message', function(data) {
     const request = JSON.parse(data);
-     nick = data.nick;
-
+   
     switch (request.type) {
       case 'loginName':
         users.body.push({
-          name: data.name,
-          nick: data.nick,
-          online: true
-          //id: userId
+          name: request.name,
+          nick: request.nick,
+          online: true,
+          id: userId
         })
 
         wss.clients.forEach(client => {
@@ -38,11 +39,19 @@ wss.on('connection', function(wsParams) {
 
       break;
       case 'message':
-        //console.log(wss)
         wss.clients.forEach(client => {
           client.send(data);
-          
         });
+       
+      break;
+      case 'userDelete':
+        users.body.forEach(user => {
+          if (user.id == request.id) {
+            console.log('да');
+            user.online = 'undefined';
+            console.log(users)
+          }
+        })
        
       break;
       default: console.error('Unknown response type')
@@ -52,17 +61,15 @@ wss.on('connection', function(wsParams) {
 
   wsParams.on('close', function (data) {
     console.log('client disconnect');
-    console.log(nick + " disconnected")
-    //console.log(wss.clients);
-    //console.log(data);
 
-    //users.body.forEach(user => {
-
-    //})
-    //перебрать пользователей foreach найти кто вышел и сделать олайн
-   //обновить юзерз 
-    wss.clients.forEach(client => {
-      //client.send(JSON.stringify(users));
-    });
+    users.body.forEach(user => {
+      if (user.id === userId) {
+        user.online = false;
+        wss.clients.forEach(client => {
+          client.send(JSON.stringify(users));
+        });
+      }
+    })
+    
   })
 })

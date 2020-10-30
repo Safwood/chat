@@ -28,9 +28,8 @@ ws.onopen = function () {
   console.log('client connect');
 }
 
-ws.onclose = function (event) {
+ws.onclose = function () {
   console.log('client disconnect');
-  console.log(event);
 }
 
 ws.onerror = function (err) {
@@ -42,15 +41,41 @@ ws.onmessage = function(event) {
   
   switch (response.type) {
     case 'loginName':
-      addNewUser(response.name);
-      addNewNotification(response.name);
+      addNewNotification(response.name, true, response.id);
       break;
     case 'message':
       console.log(response)
       addNewMesssage(response.requestBody, response.name, response.photo);
       break;
     case 'allUsers':
-      console.log(response)
+      usersList.innerHTML = '';
+      usersListArray = 0;
+
+      response.body.forEach(user => {   
+        //console.log(user.online)   
+        if (user.online === true) {
+          const el = addNewUser(user.name);
+          usersList.appendChild(el);
+          usersListArray++;
+          console.log(true)
+
+        } if (user.online === false) {
+          console.log(false)
+          addNewNotification(user.name, false, user.id);
+
+          const deleteRequest = {
+            type: 'userDelete',
+            name: name,
+            id: user.id
+          }
+      
+          ws.send(JSON.stringify(deleteRequest));
+        } if  (user.online === 'undefined') {
+          console.log("no such user")
+        }
+      })
+      let usersTotal = String(usersListArray);
+      usersNumber.textContent = usersTotal;
       break;
     default: console.error('Unknown response type')
       break;
@@ -71,21 +96,24 @@ function setTime() {
 
 function addNewUser(name) {
   const item = document.createElement('li');
-
   item.classList.add('chat__users-item');
   item.textContent = name;
-  usersList.appendChild(item);
-  usersListArray++;
 
-  let usersTotal = String(usersListArray);
-  usersNumber.textContent = usersTotal;
+  return item;
 }
 
-function addNewNotification(name) {
+function addNewNotification(name, state, userId) {
   const div = document.createElement('div');
 
   div.classList.add('chat__messages-notification');
-  div.textContent = `${name} в чате`;
+  if (state === true) {
+    div.textContent = `${name} в чате`;
+  } if (state === false) {
+      
+    div.textContent = `${name} вышел(а) из чата`;
+    
+  } 
+  
   chatScreen.appendChild(div);
 }
 
