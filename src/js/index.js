@@ -1,5 +1,6 @@
 const loginButton = document.querySelector('.login__button');
 const loginInput = document.querySelector('.login__name');
+const nickNameInput = document.querySelector('.login__nickName');
 const loginPage = document.querySelector('.login');
 const chatPage = document.querySelector('.chat');
 const usersList = document.querySelector('.chat__users-list');
@@ -27,8 +28,9 @@ ws.onopen = function () {
   console.log('client connect');
 }
 
-ws.onclose = function () {
+ws.onclose = function (event) {
   console.log('client disconnect');
+  console.log(event);
 }
 
 ws.onerror = function (err) {
@@ -37,14 +39,18 @@ ws.onerror = function (err) {
 
 ws.onmessage = function(event) {
   const response = JSON.parse(event.data);
-
+  
   switch (response.type) {
     case 'loginName':
-      addNewUser(response.requestBody);
-      addNewNotification(response.requestBody);
+      addNewUser(response.name);
+      addNewNotification(response.name);
       break;
     case 'message':
+      console.log(response)
       addNewMesssage(response.requestBody, response.name, response.photo);
+      break;
+    case 'allUsers':
+      console.log(response)
       break;
     default: console.error('Unknown response type')
       break;
@@ -113,7 +119,6 @@ messageWindow.addEventListener('change', () => {
   const message = messageWindow.value;
   const name = userTitle.textContent;
   const photoLink = photo.src;
-  const time = '12:00'
   const request = {
     type: 'message',
     requestBody: message,
@@ -132,11 +137,13 @@ closeButton.addEventListener('click', () => {
 
 loginButton.addEventListener('click',() => {
   const userName = loginInput.value.trim();
+  const nickName = nickNameInput.value.trim();
 
-  if (userName) {
+  if (userName, nickName) {
     const request = {
       type: 'loginName',
-      requestBody: userName
+      name: userName,
+      nick: nickName
     }
 
     ws.send(JSON.stringify(request));
