@@ -44,7 +44,6 @@ ws.onmessage = function(event) {
       addNewNotification(response.name, true, response.id);
       break;
     case 'message':
-      console.log(response)
       addNewMesssage(response.requestBody, response.name, response.photo);
       break;
     case 'allUsers':
@@ -52,15 +51,12 @@ ws.onmessage = function(event) {
       usersListArray = 0;
 
       response.body.forEach(user => {   
-        //console.log(user.online)   
         if (user.online === true) {
           const el = addNewUser(user.name);
           usersList.appendChild(el);
           usersListArray++;
-          console.log(true)
 
         } if (user.online === false) {
-          console.log(false)
           addNewNotification(user.name, false, user.id);
 
           const deleteRequest = {

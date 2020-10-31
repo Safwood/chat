@@ -11,13 +11,8 @@ const users = {
 
 const { v4: uuidv4 } = require('uuid');
 
-//var userId = 1000;
-//const online = {};
-
 wss.on('connection', function(wsParams) {
   const userId = uuidv4();
-  //console.log('user connect: ' + userId);
-  let nick;
 
   wsParams.on('message', function(data) {
     const request = JSON.parse(data);
@@ -47,9 +42,7 @@ wss.on('connection', function(wsParams) {
       case 'userDelete':
         users.body.forEach(user => {
           if (user.id == request.id) {
-            console.log('да');
             user.online = 'undefined';
-            console.log(users)
           }
         })
        
@@ -70,6 +63,5 @@ wss.on('connection', function(wsParams) {
         });
       }
     })
-    
   })
 })
