@@ -284,3 +284,7 @@ outline: none;
     align-items: center;
     margin-bottom: 10px;
 }
+
+.chat__user-nick {
+  display: none;
+}

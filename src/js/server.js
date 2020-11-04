@@ -39,6 +39,12 @@ wss.on('connection', function(wsParams) {
         });
        
       break;
+      case 'photoLoad':
+        wss.clients.forEach(client => {
+          client.send(data);
+        });
+       
+      break;
       case 'userDelete':
         users.body.forEach(user => {
           if (user.id == request.id) {

@@ -16,7 +16,7 @@ rules.push({
 
 module.exports = {
     entry: {
-        index: './js/index.js'
+        index: './index.js'
     },
     devServer: {
         index: './index.html',
@@ -43,9 +43,9 @@ module.exports = {
         ]
     },
     plugins: [
-        new ExtractTextPlugin('main.css'),
+        new ExtractTextPlugin('./src/css/main.css'),
         new HtmlPlugin({
-            title: 'GeoFeedBack',
+            title: 'Chat',
             template: 'index.hbs'
         }),
         new CleanWebpackPlugin(['dist'])
