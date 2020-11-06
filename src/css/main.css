@@ -36,7 +36,7 @@ h1, h2, h3 {
   font-size: 18px;
 }
 
-.login__name {
+.login__name, .login__nickname {
   margin-bottom: 20px;
 }
 
@@ -202,9 +202,10 @@ h1, h2, h3 {
 
 .chat__messages-screen {
   width: 100%;
+  overflow: auto;
   flex: 1;
   padding: 20px 36px;
-  overflow-y: scroll;
+  
 }
 
 .chat__messages-new {
