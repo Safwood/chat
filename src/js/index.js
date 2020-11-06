@@ -113,6 +113,8 @@ function addNewNotification(name, state, userId) {
   } 
   
   chatScreen.appendChild(div);
+
+  scrollToEndPage()
 }
 
 function addNewMesssage(message, name, photo, nick) {
@@ -138,6 +140,8 @@ function addNewMesssage(message, name, photo, nick) {
   messageBlock.appendChild(headingBlock);
   messageBlock.appendChild(contentBlock);
   chatScreen.appendChild(messageBlock);
+
+  scrollToEndPage()
 }
 
 function addPhoto (nick, photo) {
@@ -175,7 +179,7 @@ messageWindow.addEventListener('change', () => {
   ws.send(JSON.stringify(request));
 
   messageWindow.value = '';
-  scrollToEndPage()
+  
 })
 
 closeButton.addEventListener('click', () => {
