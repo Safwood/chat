@@ -1,4 +1,5 @@
 # Чат
+Пример использования JavaScript + webSocket.
 
 ## Установка:
 1. В командной строке git clone https://github.com/Safwood/chat.git
