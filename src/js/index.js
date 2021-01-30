@@ -1,16 +1,16 @@
-const loginButton = document.querySelector('.login__button');
-const loginInput = document.querySelector('.login__name');
-const nickNameInput = document.querySelector('.login__nickname');
+const loginButton = document.querySelector('.form__button');
+const loginInput = document.querySelector('.form__name');
+const nickNameInput = document.querySelector('.form__nickname');
 const loginPage = document.querySelector('.login');
+const loginError = document.querySelector('.error');
+const closeButton = document.querySelector('.error__button');
+const usersNumber = document.querySelector('.users__number');
 const chatPage = document.querySelector('.chat');
-const usersList = document.querySelector('.chat__users-list');
-const chatScreen = document.querySelector('.chat__messages-screen');
-const messageWindow = document.querySelector('.chat__messages-new');
-const userNick = document.querySelector('.chat__user-nick');
-const userTitle = document.querySelector('.chat__users-name');
-const loginError = document.querySelector('.login__error');
-const closeButton = document.querySelector('.close-button');
-const usersNumber = document.querySelector('.chat__users-number');
+const usersList = document.querySelector('.users__list');
+const userNick = document.querySelector('.users__nick');
+// const userTitle = document.querySelector('.users__name');
+const chatScreen = document.querySelector('.messages__screen');
+const messageWindow = document.querySelector('.messages__input');
 const photo = document.querySelector('#user_avatar');
 const photoLoading = document.querySelector('#upload-photo');
 const addPhotoButton = document.querySelector('[data-role=add-photo]');
@@ -20,6 +20,13 @@ const cancelButton = document.querySelector('[data-role=cancel-button]');
 const chooseButton = document.querySelector('[data-role=choose-button]');
 const uploadButton = document.querySelector('[data-role=upload-button]');
 let usersListArray = 0;
+
+let currentUser = {
+  name: "",
+  nick: "",
+  photo: "./images/photo.jpeg",
+  id: ""
+}
 
 //server//
 const ws = new WebSocket('ws://localhost:8080');
@@ -47,7 +54,8 @@ ws.onmessage = function(event) {
       addNewMesssage(response.requestBody, response.name, response.photo, response.nick);
       break;
     case 'photoLoad':
-      addPhoto(response.nick, response.photo)
+      addPhotoToMessages(response.nick, response.photo)
+      addPhotoToList (response.nick, response.photo)
       break;
     case 'allUsers':
       usersList.innerHTML = '';
@@ -55,7 +63,7 @@ ws.onmessage = function(event) {
 
       response.body.forEach(user => {   
         if (user.online === true) {
-          const el = addNewUser(user.name);
+          const el = addNewUser(user.name, user.nick);
           usersList.appendChild(el);
           usersListArray++;
 
@@ -86,17 +94,25 @@ ws.onmessage = function(event) {
 function setTime() {
   const date = new Date();
   const div = document.createElement('div');
-  let time = (date.getHours()+":"+date.getMinutes());
-  div.classList.add('chat__messages-time');
+  let time = (date.getHours()+":"+ (date.getMinutes()<10?'0':'')+ date.getMinutes());
+  div.classList.add('messages__time');
   div.textContent = time;
 
   return div
 }
 
-function addNewUser(name) {
+function addNewUser(name, nick) {
   const item = document.createElement('li');
-  item.classList.add('chat__users-item');
-  item.textContent = name;
+  item.dataset.nick = `${nick}`;
+  const itemImage = document.createElement('img');
+  const itemName = document.createElement('p');
+  item.classList.add('users__item');
+  itemImage.classList.add('avatar');
+  itemImage.src = './images/photo.jpeg';
+  itemName.classList.add('users__name');
+  itemName.textContent = name;
+  item.appendChild(itemImage)
+  item.appendChild(itemName)
 
   return item;
 }
@@ -104,7 +120,7 @@ function addNewUser(name) {
 function addNewNotification(name, state, userId) {
   const div = document.createElement('div');
 
-  div.classList.add('chat__messages-notification');
+  div.classList.add('messages__notification');
   if (state === true) {
     div.textContent = `${name} в чате`;
   } if (state === false) {
@@ -121,39 +137,45 @@ function addNewMesssage(message, name, photo, nick) {
   const messageBlock = document.createElement('div');
   const contentBlock = document.createElement('div');
   const headingBlock = document.createElement('div');
-  const nameBlock = document.createElement('div');
   const image = document.createElement('img');
   const timeBlock = setTime();
 
-  contentBlock.classList.add('chat__messages-content');
+  contentBlock.classList.add('messages__content');
   image.classList.add('avatar--small');
   image.src = photo;
-  headingBlock.classList.add('chat__messages-heading')
+  headingBlock.classList.add('messages__heading')
   contentBlock.textContent = message;
-  nameBlock.classList.add('chat__messages-name');
-  nameBlock.textContent = `${name}:`;
-  messageBlock.classList.add('chat__messages-text');
+  messageBlock.classList.add('messages__text');
   messageBlock.dataset.nick = `${nick}`;
-  headingBlock.appendChild(image);
+  messageBlock.appendChild(image);
+  headingBlock.appendChild(contentBlock);
   headingBlock.appendChild(timeBlock);
-  headingBlock.appendChild(nameBlock);
   messageBlock.appendChild(headingBlock);
-  messageBlock.appendChild(contentBlock);
   chatScreen.appendChild(messageBlock);
 
   scrollToEndPage()
 }
 
-function addPhoto (nick, photo) {
+function addPhotoToMessages (nick, photo) {
   const allElement = chatScreen.children;
   
   for (const el of allElement) {
-    if (el.classList == 'chat__messages-text') {
+    if (el.classList == 'messages__text') {
       if (el.dataset.nick == nick) {
-        const messageHeading = el.firstChild;
-        const photoEl = messageHeading.firstChild;
+        const photoEl = el.firstChild;
         photoEl.src = photo;
       }
+    }
+  }
+}
+
+function addPhotoToList (nick, photo) {
+  const allElements = usersList.children;
+  
+  for (const el of allElements) {
+    if (el.dataset.nick == nick) {
+      const photoEl = el.firstChild;
+      photoEl.src = photo;
     }
   }
 }
@@ -164,10 +186,10 @@ function scrollToEndPage() {
 };
 
 messageWindow.addEventListener('change', () => {
-      const message = messageWindow.value;
-  const name = userTitle.textContent;
-  const nick = userNick.textContent;
-  const photoLink = photo.src;
+  const message = messageWindow.value;
+  const name = currentUser.name;
+  const nick = currentUser.nick;
+  const photoLink = currentUser.photo;
   const request = {
     type: 'message',
     requestBody: message,
@@ -200,8 +222,8 @@ loginButton.addEventListener('click',() => {
     ws.send(JSON.stringify(request));
     loginPage.style.display = "none";
     chatPage.style.display = "flex";
-    userTitle.textContent = userName;
-    userNick.textContent = nickName;
+    currentUser.name = userName;
+    currentUser.nick = nickName;
   } else {
     loginError.style.display = "flex";
   }
@@ -235,12 +257,12 @@ chooseButton.addEventListener('change', (e) => {
 })
 
 uploadButton.addEventListener('click', () => {
-  photo.src = fileReader.result;
+  currentUser.photo = fileReader.result;
   const photoLink = fileReader.result;
 
   uploadForm.style.display = "none";
 
-  const nick = userNick.textContent;
+  const nick = currentUser.nick;
   const request = {
     type: 'photoLoad',
     photo: photoLink,

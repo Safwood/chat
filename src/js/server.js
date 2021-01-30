@@ -29,29 +29,24 @@ wss.on('connection', function(wsParams) {
         wss.clients.forEach(client => {
           client.send(data);
           client.send(JSON.stringify(users));
-          
         });
-
       break;
       case 'message':
         wss.clients.forEach(client => {
           client.send(data);
-        });
-       
+        });       
       break;
       case 'photoLoad':
         wss.clients.forEach(client => {
           client.send(data);
-        });
-       
+        });       
       break;
       case 'userDelete':
         users.body.forEach(user => {
           if (user.id == request.id) {
             user.online = 'undefined';
           }
-        })
-       
+        })      
       break;
       default: console.error('Unknown response type')
       break;

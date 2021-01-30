@@ -5,56 +5,62 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chat</title>
   <link rel="stylesheet" href="./css/main.css">
+  <link rel="stylesheet" href="./css/normalize.css">
 </head>
 <body>
   <div class="wrapper">
     <div class="login">
-      <div class="login__form">
-        <p class="login__form-title">Авторизация</p>
-        <input type="text" class="login__name" placeholder="Введите имя" data-role="login-input">
-        <input type="text" class="login__nickname" placeholder="Введите ник" data-role="login-input">
-        <button class="login__button" data-role="login-button">Войти</button>
+      <div class="login__form form">
+        <div class="logo">
+          <img class="logo__image" src="./images/logo_.png" alt="logo">
+        </div>
+        <p class="form__title">Авторизация</p>
+        <div class="form__description">Введите пожалуйста своё фио и ник для дальнейшей авторизации</div>
+        <div class="form__inputs">
+          <input type="text" class="form__input form__name" placeholder="Введите свое имя" data-role="login-input">
+          <input type="text" class="form__input form__nickname" placeholder="Введите свой ник" data-role="login-input">
+        </div>
+        <button class="form__button button" data-role="login-button">ВОЙТИ</button>
       </div>
-      <div class="login__error">
-        <p class="login__error-content">Заполните все поля</p>
-        <button class="close-button">Закрыть</button>
+      <div class="error">
+        <p class="error__content">Заполните все поля</p>
+        <button class="error__button button">ЗАКРЫТЬ</button>
       </div>
     </div>
     <div class="chat">
-      <div class="chat__users">
-        <div class="chat__users-header">
-          <div class="chat__users-user">
-            <div class="chat__users-photo">
-              <img src="placeholder-man.png" class="avatar" id="user_avatar" alt="Фото пользователя">
-              <a class="chat__users-link" data-role="add-photo">Загрузить</a>
-            </div>
-            <h1 class="chat__users-name"></h1>
-            <p class="chat__user-nick"></p>
-          </div>
-          <p class="chat__users-title">Пользователи в сети (<span class="chat__users-number"></span>):</p>
+      <div class="chat__users users">
+        <div class="users__header">
+          <button class="users__settings" data-role="add-photo">
+            <img src="./images/rectangle_9_copy_2_5990.png" alt="">
+          </button>
+          <input class="users__search" placeholder="Найти..."></input>
         </div>
-        <ul class="chat__users-list">
-    
+        <ul class="users__list">
+
         </ul>
       </div>
-      <div class="chat__messages">
-        <div class="chat__messages-screen">
+      <div class="chat__messages messages">
+        <div class="messages__quantity">
+          <p class="messages__title">Чат</p>
+          <p class="messages__online"><span class="users__number"></span> участник(а)</p>
+        </div>
+        <div class="messages__screen">
           
         </div>
-        <div class="chat__messages-write">
-          <input type="text" class="chat__messages-new">
-          <button class="chat__messages-button">Отправить</button>
+        <div class="messages__input-field">
+          <input type="text" class="messages__input" placeholder="Введите сообщение...">
+          <button class="button messages__button">Отправить</button>
         </div>
       </div>
       <div class="photo-upload" data-role="upload-form">
         <h1 class="photo-upload__title">Загрузка фото</h1>
-        <img src="./placeholder-man.png" alt="Фото пользователя" class="avatar avatar--big" id="upload-photo">
-        <label for="input" class="label-box">
-          <input type="file" id="input" name="file" class="photo-upload__input" data-role="choose-button"></input>
-          <div class="chat__users-link chat__users-link--main">Выбрать</div>
+        <img class="avatar avatar--big" src="./images/photo.jpeg" alt="Фото пользователя" id="upload-photo">
+        <label class="photo-upload__label" for="input" >
+          <input class="photo-upload__input" type="file" id="input" name="file" data-role="choose-button"></input>
+          <div class="photo-upload__link photo-upload__link--main">Выбрать</div>
         </label>
-        <button class="button" data-role="upload-button">Загрузить</button>
-        <button class="button" data-role="cancel-button">Отмена</button>
+        <button class="photo-upload__button button" data-role="upload-button">Сохранить</button>
+        <button class="photo-upload__button--cancel button" data-role="cancel-button">Отмена</button>
       </div>
     </div>
   </div>
