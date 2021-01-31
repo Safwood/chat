@@ -5,10 +5,10 @@ const loginPage = document.querySelector('.login');
 const loginError = document.querySelector('.error');
 const closeButton = document.querySelector('.error__button');
 const usersNumber = document.querySelector('.users__number');
+const searchInput = document.querySelector('.users__search');
 const chatPage = document.querySelector('.chat');
 const usersList = document.querySelector('.users__list');
 const userNick = document.querySelector('.users__nick');
-// const userTitle = document.querySelector('.users__name');
 const chatScreen = document.querySelector('.messages__screen');
 const messageWindow = document.querySelector('.messages__input');
 const photo = document.querySelector('#user_avatar');
@@ -20,6 +20,7 @@ const cancelButton = document.querySelector('[data-role=cancel-button]');
 const chooseButton = document.querySelector('[data-role=choose-button]');
 const uploadButton = document.querySelector('[data-role=upload-button]');
 let usersListArray = 0;
+let allUsers = [];
 
 let currentUser = {
   name: "",
@@ -47,11 +48,8 @@ ws.onmessage = function(event) {
   const response = JSON.parse(event.data);
   
   switch (response.type) {
-    case 'loginName':
-      addNewNotification(response.name, true, response.id);
-      break;
     case 'message':
-      addNewMesssage(response.requestBody, response.name, response.photo, response.nick);
+      addNewMesssage(response.requestBody, response.photo, response.nick);
       break;
     case 'photoLoad':
       addPhotoToMessages(response.nick, response.photo)
@@ -60,26 +58,28 @@ ws.onmessage = function(event) {
     case 'allUsers':
       usersList.innerHTML = '';
       usersListArray = 0;
+      allUsers = [];
+      const searchValue = searchInput.value;
 
       response.body.forEach(user => {   
         if (user.online === true) {
-          const el = addNewUser(user.name, user.nick);
-          usersList.appendChild(el);
           usersListArray++;
+          allUsers.push(user)
+          if(searchValue == "") {
+            const el = addNewUser(user.name, user.nick);
+            usersList.appendChild(el);
+          } else {
+            if(user.name.match(searchValue)){
+              const el = addNewUser(user.name, user.nick);
+              usersList.appendChild(el);
+            }
+          }
 
         } if (user.online === false) {
           addNewNotification(user.name, false, user.id);
 
-          const deleteRequest = {
-            type: 'userDelete',
-            name: name,
-            id: user.id
-          }
-      
-          ws.send(JSON.stringify(deleteRequest));
-        } if  (user.online === 'undefined') {
-          console.log("no such user")
-        }
+          ws.send(JSON.stringify({type: 'userDelete'}));
+        } 
       })
       let usersTotal = String(usersListArray);
       usersNumber.textContent = usersTotal;
@@ -117,37 +117,48 @@ function addNewUser(name, nick) {
   return item;
 }
 
-function addNewNotification(name, state, userId) {
+function addNewNotification(name, state) {
   const div = document.createElement('div');
-
   div.classList.add('messages__notification');
-  if (state === true) {
-    div.textContent = `${name} в чате`;
-  } if (state === false) {
-      
-    div.textContent = `${name} вышел(а) из чата`;
-  } 
-  
+  div.textContent = `${name} покинул(а) чат`;
   chatScreen.appendChild(div);
 
   scrollToEndPage()
 }
 
-function addNewMesssage(message, name, photo, nick) {
+function addNewMesssage(message, photo, nick) {
   const messageBlock = document.createElement('div');
   const contentBlock = document.createElement('div');
   const headingBlock = document.createElement('div');
   const image = document.createElement('img');
+  const imageEmpty = document.createElement('div');
   const timeBlock = setTime();
 
   contentBlock.classList.add('messages__content');
-  image.classList.add('avatar--small');
+  
   image.src = photo;
-  headingBlock.classList.add('messages__heading')
   contentBlock.textContent = message;
-  messageBlock.classList.add('messages__text');
   messageBlock.dataset.nick = `${nick}`;
-  messageBlock.appendChild(image);
+  
+  
+  if(currentUser.nick == nick) {
+    messageBlock.classList.add('messages__text');
+    headingBlock.classList.add('messages__heading')
+    image.classList.add('avatar--small');
+    imageEmpty.classList.add("messages__empty-image")
+  } else {
+    messageBlock.classList.add('messages__text--right')
+    headingBlock.classList.add('messages__heading--right')
+    image.classList.add('avatar--small--right');
+    imageEmpty.classList.add("messages__empty-image--right")
+  }
+
+  if(chatScreen.lastChild.dataset.nick !== nick) {
+    messageBlock.appendChild(image);
+  } else {
+    messageBlock.appendChild(imageEmpty);
+  }
+  
   headingBlock.appendChild(contentBlock);
   headingBlock.appendChild(timeBlock);
   messageBlock.appendChild(headingBlock);
@@ -184,6 +195,17 @@ function addPhotoToList (nick, photo) {
 function scrollToEndPage() { 
   chatScreen.scrollTop = chatScreen.scrollHeight;
 };
+
+function filterUser(input){
+  usersList.innerHTML = '';
+
+ for(user of allUsers) {
+   if(user.name.match(input)){
+     const filteredUser = addNewUser(user.name, user.nick)
+     usersList.appendChild(filteredUser);
+   }
+ }
+}
 
 messageWindow.addEventListener('change', () => {
   const message = messageWindow.value;
@@ -270,4 +292,9 @@ uploadButton.addEventListener('click', () => {
   }
 
   ws.send(JSON.stringify(request));
+})
+
+searchInput.addEventListener('input', () => {
+  const searchContent = searchInput.value;
+  filterUser(searchContent)
 })
