@@ -26,9 +26,10 @@ wss.on('connection', function(wsParams) {
           id: userId
         })
 
-         wss.clients.forEach(client => {
-           client.send(JSON.stringify(users));
-         });
+        wss.clients.forEach(client => {
+          client.send(data);
+          client.send(JSON.stringify(users));
+        });
       break;
       case 'message':
         wss.clients.forEach(client => {
@@ -42,13 +43,11 @@ wss.on('connection', function(wsParams) {
       break;
       case 'userDelete':
         let currentArray = []
-
         users.body.forEach(user => {
           if (user.online == true) {
             currentArray.push(user)
           }
-        })  
-
+        })   
         users.body = JSON.parse(JSON.stringify(currentArray)) 
       break;
       default: console.error('Unknown response type')

@@ -48,8 +48,11 @@ ws.onmessage = function(event) {
   const response = JSON.parse(event.data);
   
   switch (response.type) {
+    case 'loginName':
+      null
+      break;
     case 'message':
-      addNewMesssage(response.requestBody, response.photo, response.nick);
+      addNewMesssage(response.requestBody, response.name, response.photo, response.nick);
       break;
     case 'photoLoad':
       addPhotoToMessages(response.nick, response.photo)
@@ -78,7 +81,13 @@ ws.onmessage = function(event) {
         } if (user.online === false) {
           addNewNotification(user.name, false, user.id);
 
-          ws.send(JSON.stringify({type: 'userDelete'}));
+          const deleteRequest = {
+            type: 'userDelete',
+            name: name,
+            id: user.id
+          }
+      
+          ws.send(JSON.stringify(deleteRequest));
         } 
       })
       let usersTotal = String(usersListArray);
@@ -119,28 +128,33 @@ function addNewUser(name, nick) {
 
 function addNewNotification(name, state) {
   const div = document.createElement('div');
+
   div.classList.add('messages__notification');
-  div.textContent = `${name} покинул(а) чат`;
+  if (state === true) {
+    null
+  } if (state === false) {
+    div.textContent = `${name} вышел(а) из чата`;
+  } 
+  
   chatScreen.appendChild(div);
 
   scrollToEndPage()
 }
 
-function addNewMesssage(message, photo, nick) {
+function addNewMesssage(message, name, photo, nick) {
+  //создаем блок с сообщением
   const messageBlock = document.createElement('div');
   const contentBlock = document.createElement('div');
   const headingBlock = document.createElement('div');
   const image = document.createElement('img');
   const imageEmpty = document.createElement('div');
   const timeBlock = setTime();
-
   contentBlock.classList.add('messages__content');
-  
   image.src = photo;
   contentBlock.textContent = message;
   messageBlock.dataset.nick = `${nick}`;
   
-  
+  //определяем справа или слева будет размещаться сообщение
   if(currentUser.nick == nick) {
     messageBlock.classList.add('messages__text');
     headingBlock.classList.add('messages__heading')
@@ -153,9 +167,12 @@ function addNewMesssage(message, photo, nick) {
     imageEmpty.classList.add("messages__empty-image--right")
   }
 
-  if(chatScreen.lastChild.dataset.nick !== nick) {
+  //определяем добавлять ли фото
+  if(!chatScreen.lastChild) {
     messageBlock.appendChild(image);
-  } else {
+  } else if (chatScreen.firstChild && chatScreen.lastChild.dataset.nick !== nick) {
+    messageBlock.appendChild(image);
+  } else if (chatScreen.firstChild && !chatScreen.lastChild.dataset.nick !== nick) {
     messageBlock.appendChild(imageEmpty);
   }
   
